@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=0.5">
 <title>新発田市オープンデータ</title>
 <script type="text/javascript" src="database.js"></script>
 <script>
@@ -155,16 +155,16 @@
                 pen.beginPath();
                 pen.strokeStyle = "rgba(200,0,0,0.75)";
             }
-            pen.moveTo(canvas.width / 2, 385 - i * 17);
+            pen.moveTo(canvas.width / 2, 380 - i * 17);
             if (animation_mode == 0) {
                 if (frame > data_m[i] / 20) {
                     over_frame++
-                    pen.lineTo(canvas.width / 2 + data_m[i] / 20 + 0.5, 385 - i * 17);
+                    pen.lineTo(canvas.width / 2 + data_m[i] / 20 + 0.5, 380 - i * 17);
                 } else {
-                    pen.lineTo(canvas.width / 2 + frame + 0.5, 385 - i * 17);
+                    pen.lineTo(canvas.width / 2 + frame + 0.5, 380 - i * 17);
                 }
             } else {
-                pen.lineTo(canvas.width / 2 + data_m[i] / 20 + 0.5, 385 - i * 17);
+                pen.lineTo(canvas.width / 2 + data_m[i] / 20 + 0.5, 380 - i * 17);
             }
             pen.stroke();
         }
@@ -180,16 +180,16 @@
                 pen.beginPath();
                 pen.strokeStyle = "rgba(200,0,0,0.75)";
             }
-            pen.moveTo(canvas.width / 2, 385 - i * 17);
+            pen.moveTo(canvas.width / 2, 380 - i * 17);
             if (animation_mode == 0) {
                 if (frame > data_w[i] / 20) {
                     over_frame++
-                    pen.lineTo(canvas.width / 2 - data_w[i] / 20 - 0.5, 385 - i * 17);
+                    pen.lineTo(canvas.width / 2 - data_w[i] / 20 - 0.5, 380 - i * 17);
                 } else {
-                    pen.lineTo(canvas.width / 2 - frame - 0.5, 385 - i * 17);
+                    pen.lineTo(canvas.width / 2 - frame - 0.5, 380 - i * 17);
                 }
             } else {
-                pen.lineTo(canvas.width / 2 - data_w[i] / 20 - 0.5, 385 - i * 17);
+                pen.lineTo(canvas.width / 2 - data_w[i] / 20 - 0.5, 380 - i * 17);
             }
             pen.stroke();
         }
@@ -205,14 +205,14 @@
             pen.beginPath();
             pen.strokeStyle = "rgba(0,0,0,0.5)";
             pen.textAlign = 'center';
-            pen.font = "10px serif";
+            pen.font = "11px serif";
             pen.lineWidth = 1;
             pen.moveTo(canvas.width / 2 + i * 25, 0);
             pen.lineTo(canvas.width / 2 + i * 25, 400);
-            pen.fillText(i * 500, canvas.width / 2 + i * 25 - 10, canvas.height);
+            pen.fillText(i * 500, canvas.width / 2 + i * 25 - 13.5, canvas.height);
             pen.moveTo(canvas.width / 2 - i * 25, 0);
             pen.lineTo(canvas.width / 2 - i * 25, 400);
-            pen.fillText(i * 500, canvas.width / 2 - i * 25 + 10, canvas.height);
+            pen.fillText(i * 500, canvas.width / 2 - i * 25 + 13.5, canvas.height);
             pen.stroke();
         }
 
@@ -221,7 +221,7 @@
         pen.textAlign = 'center';
         pen.font = "15px serif";
         for (var i = 0; i < old.length; i++){
-            pen.fillText(old[i], canvas.width / 2 + 25, 390 - i * 17);
+            pen.fillText(old[i], canvas.width / 2 + 25, 385 - i * 17);
         }
         if (animation_mode == 0) {
             if (over_frame == old.length * 2) {
@@ -247,6 +247,7 @@
 <style>
 body {
     font-family: sans-serif;
+    margin: 0px;
 }
 h1 {
     background-color: #39a73b;
