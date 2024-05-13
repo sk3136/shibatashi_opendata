@@ -101,6 +101,8 @@
         frame = 0;
         var selected_year = document.getElementById('year').value;
         var selected_month = document.getElementById('month').value;
+        var div_pyramid = document.getElementById('population_pyramid');
+        var div_chart = document.getElementById('pie_chart');
         dropdown(0, selected_year, selected_month);
         if (year == selected_year && month < selected_month) {
             selected_year = year;
@@ -110,12 +112,21 @@
             if (on_off == 'off') {
                 clearInterval(setinterval);
             }
+            div_pyramid.style.display = 'block';
+            div_chart.style.display = 'none';
             // 指定した間隔で関数を実行する
-            setinterval = setInterval(glaph, 1000 / 180, selected_year - 2016, selected_month - 1, 0);
-        } else {
+            setinterval = setInterval(glaph, 1, selected_year - 2016, selected_month - 1, 0);
+        } else if (animation_button == 1) {
             animation(selected_year - 2016, selected_month - 1);
+        } else if (animation_button == 2) {
+            clearInterval(setinterval);
+            on_off = 'off'
+            div_pyramid.style.display = 'none';
+            div_chart.style.display = 'block';
+            setinterval = setInterval(chart, 1, selected_year - 2016, selected_month - 1);
         }
     }
+
     function glaph(selected_year, selected_month, animation_mode) {
         data_m = database_m[selected_year + year_gap][selected_month + month_gap];
         data_w = database_w[selected_year + year_gap][selected_month + month_gap];
@@ -137,7 +148,7 @@
         }
 
         var over_frame = 0;
-        frame++
+        frame = frame + 5;
         var canvas = document.getElementById('canvas');
         var pen = canvas.getContext("2d");
         pen.clearRect(0, 0, canvas.width, canvas.height);
@@ -145,51 +156,51 @@
         pen.beginPath();
         pen.lineWidth = 15;
         for (var i = 0; i < old.length; i++) {
-            if (i >= 0 && i <= 2) {
+            if (i <= 2) {
                 pen.beginPath();
                 pen.strokeStyle = "rgba(0,0,200,0.75)";
             } else if (i >= 3 && i <= 12) {
                 pen.beginPath();
                 pen.strokeStyle = "rgba(0,200,0,0.75)";
-            } else if (i >= 13 && i <= 20) {
+            } else if (i >= 13) {
                 pen.beginPath();
                 pen.strokeStyle = "rgba(200,0,0,0.75)";
             }
-            pen.moveTo(canvas.width / 2, 380 - i * 17);
+            pen.moveTo(canvas.width / 2, 375 - i * 17);
             if (animation_mode == 0) {
-                if (frame > data_m[i] / 20) {
+                if (frame > data_m[i] / 30) {
                     over_frame++
-                    pen.lineTo(canvas.width / 2 + data_m[i] / 20 + 0.5, 380 - i * 17);
+                    pen.lineTo(canvas.width / 2 - data_m[i] / 30 - 0.5, 375 - i * 17);
                 } else {
-                    pen.lineTo(canvas.width / 2 + frame + 0.5, 380 - i * 17);
+                    pen.lineTo(canvas.width / 2 - frame - 0.5, 375 - i * 17);
                 }
             } else {
-                pen.lineTo(canvas.width / 2 + data_m[i] / 20 + 0.5, 380 - i * 17);
+                pen.lineTo(canvas.width / 2 - data_m[i] / 30 - 0.5, 375 - i * 17);
             }
             pen.stroke();
         }
         pen.beginPath();
         for (var i = 0; i < old.length; i++) {
-            if (i >= 0 && i <= 2) {
+            if (i <= 2) {
                 pen.beginPath();
                 pen.strokeStyle = "rgba(0,0,200,0.75)";
             } else if (i >= 3 && i <= 12) {
                 pen.beginPath();
                 pen.strokeStyle = "rgba(0,200,0,0.75)";
-            } else if (i >= 13 && i <= 20) {
+            } else if (i >= 13) {
                 pen.beginPath();
                 pen.strokeStyle = "rgba(200,0,0,0.75)";
             }
-            pen.moveTo(canvas.width / 2, 380 - i * 17);
+            pen.moveTo(canvas.width / 2, 375 - i * 17);
             if (animation_mode == 0) {
-                if (frame > data_w[i] / 20) {
+                if (frame > data_w[i] / 30) {
                     over_frame++
-                    pen.lineTo(canvas.width / 2 - data_w[i] / 20 - 0.5, 380 - i * 17);
+                    pen.lineTo(canvas.width / 2 + data_w[i] / 30 + 0.5, 375 - i * 17);
                 } else {
-                    pen.lineTo(canvas.width / 2 - frame - 0.5, 380 - i * 17);
+                    pen.lineTo(canvas.width / 2 + frame + 0.5, 375 - i * 17);
                 }
             } else {
-                pen.lineTo(canvas.width / 2 - data_w[i] / 20 - 0.5, 380 - i * 17);
+                pen.lineTo(canvas.width / 2 + data_w[i] / 30 + 0.5, 375 - i * 17);
             }
             pen.stroke();
         }
@@ -201,18 +212,27 @@
         pen.lineTo(canvas.width / 2 - 0.5, 400);
         pen.stroke();
 
-        for (var i = 1; i < canvas.width / 25 + 1; i++) {
+        pen.beginPath();
+        pen.font = "17px serif";
+        pen.textAlign = 'center';
+        pen.fillText(0, canvas.width / 2, canvas.height - 5);
+        pen.textAlign = 'left';
+        pen.fillText('男性', 55, 20);
+        pen.textAlign = 'right';
+        pen.fillText('女性', canvas.width - 55, 20);
+
+        for (var i = 1; i * 2000 < 4001; i++) {
             pen.beginPath();
             pen.strokeStyle = "rgba(0,0,0,0.5)";
             pen.textAlign = 'center';
-            pen.font = "11px serif";
+            pen.font = "17px serif";
             pen.lineWidth = 1;
-            pen.moveTo(canvas.width / 2 + i * 25, 0);
-            pen.lineTo(canvas.width / 2 + i * 25, 400);
-            pen.fillText(i * 500, canvas.width / 2 + i * 25 - 13.5, canvas.height);
-            pen.moveTo(canvas.width / 2 - i * 25, 0);
-            pen.lineTo(canvas.width / 2 - i * 25, 400);
-            pen.fillText(i * 500, canvas.width / 2 - i * 25 + 13.5, canvas.height);
+            pen.moveTo(canvas.width / 2 + i * 2000 / 30, 0);
+            pen.lineTo(canvas.width / 2 + i * 2000 / 30, 400);
+            pen.fillText(i * 2000, canvas.width / 2 + i * 2000 / 30, canvas.height - 5);
+            pen.moveTo(canvas.width / 2 - i * 2000 / 30, 0);
+            pen.lineTo(canvas.width / 2 - i * 2000 / 30, 400);
+            pen.fillText(i * 2000, canvas.width / 2 - i * 2000 / 30, canvas.height - 5);
             pen.stroke();
         }
 
@@ -221,8 +241,34 @@
         pen.textAlign = 'center';
         pen.font = "15px serif";
         for (var i = 0; i < old.length; i++){
-            pen.fillText(old[i], canvas.width / 2 + 25, 385 - i * 17);
+            pen.fillText(old[i], 40, 380 - i * 17);
         }
+        var all_population = 0;
+        var young_population = 0;
+        var work_population = 0;
+        var old_population = 0;
+        for (var i = 0; i < data_m.length; i++) {
+            all_population = all_population + data_m[i] + data_w[i];
+            if (i >= 0 && i <= 2) {
+                young_population = young_population + data_m[i] + data_w[i];
+            } else if (i >= 3 && i <= 12) {
+                work_population = work_population + data_m[i] + data_w[i];
+            } else if (i >= 13 && i <= 20) {
+                old_population = old_population + data_m[i] + data_w[i];
+            }
+        }
+        young_population = Math.round(young_population * 100 / all_population);
+        work_population = Math.round(work_population * 100 / all_population);
+        old_population = Math.round(old_population * 100 / all_population);
+        pen.textAlign = 'right';
+        pen.font = "12px serif";
+        pen.fillText('年少人口', canvas.width - 10, 380 - 35);
+        pen.fillText('割合' + young_population + '%', canvas.width - 10, 380 - 15);
+        pen.fillText('生産年齢人口', canvas.width - 10, 380 - 205);
+        pen.fillText('割合' + work_population + '%', canvas.width - 10, 380 - 185);
+        pen.fillText('老齢人口', canvas.width - 10, 380 - 340);
+        pen.fillText('割合' + old_population + '%', canvas.width - 10, 380 - 320);
+
         if (animation_mode == 0) {
             if (over_frame == old.length * 2) {
                 // setintervalを終わらせる
@@ -242,6 +288,140 @@
             on_off = 'on';
             clearInterval(setinterval);
         }
+    }
+
+    var over_frame_ = 0;
+    function chart(selected_year, selected_month, all) {
+        data_m = database_m[selected_year][selected_month];
+        data_w = database_w[selected_year][selected_month];
+        frame++;
+        var canvas = document.getElementById('canvas');
+        var pen = canvas.getContext("2d");
+        pen.clearRect(0, 0, canvas.width, canvas.height);
+
+        var all_population = 0;
+        var young_population = 0;
+        var work_population = 0;
+        var old_population = 0;
+        for (var i = 0; i < data_m.length; i++) {
+            all_population = all_population + data_m[i] + data_w[i];
+            if (i <= 2) {
+                young_population = young_population + data_m[i] + data_w[i];
+            } else if (i >= 3 && i <= 12) {
+                work_population = work_population + data_m[i] + data_w[i];
+            } else if (i >= 13) {
+                old_population = old_population + data_m[i] + data_w[i];
+            }
+        }
+        young_population = Math.round(young_population * 100 / all_population);
+        work_population = Math.round(work_population * 100 / all_population);
+        old_population = Math.round(old_population * 100 / all_population);
+        if (young_population + work_population + old_population != 100) {
+            old_population = 100 - young_population - work_population;
+        }
+
+        var radianStart = 0;
+        var percentage = 0;
+        pen.beginPath();
+        // arc(x軸,y軸,半径,始まりの角度(ラジアン角),終わりの角度(ラジアン角),円ならtrue弧ならfalse) Math.PI == π
+        pen.arc(canvas.width / 2, canvas.height / 2, 100, 0, Math.PI * 2, true);
+        pen.stroke();
+        // for (var i = 0; i <= 360; i++) {
+        //     if (i <= young_population * 3.6) {
+        //         radianStart = 270 * Math.PI / 180;
+        //         if (young_population <= frame || over_frame_ >= 1) {
+        //             percentage = young_population * 3.6 - 90;
+        //             if (young_population == frame) {
+        //                 over_frame_ = 1;
+        //             }
+        //         } else {
+        //             percentage = frame * 3.6 - 90;
+        //         }
+        //         pen.beginPath();
+        //         pen.fillStyle = "rgb(0,0,200)";
+        //     } else if (i > young_population * 3.6 && i <= (young_population + work_population) * 3.6 && over_frame_ >= 1) {
+        //         radianStart = (young_population * 3.6 - 90) * Math.PI / 180;
+        //         if (young_population + work_population <= frame || over_frame_ >= 2) {
+        //             percentage = (young_population + work_population) * 3.6 - 90;
+        //             if (young_population + work_population == frame) {
+        //                 over_frame_ = 2;
+        //             }
+        //         } else {
+        //             percentage = (frame + young_population) * 3.6 - 90;
+        //         }
+        //         pen.beginPath();
+        //         pen.fillStyle = "rgb(0,200,0)";
+        //     } else if (i > (young_population + work_population) * 3.6 && over_frame_ >= 2) {
+        //         radianStart = ((young_population + work_population) * 3.6 - 90) * Math.PI / 180;
+        //         if (young_population + work_population + old_population <= frame) {
+        //             percentage = (young_population + work_population + old_population) * 3.6 - 90;
+        //             if (young_population + work_population + old_population == frame) {
+        //                 clearInterval(setinterval);
+        //             }
+        //         } else {
+        //             percentage = (frame + young_population + work_population) * 3.6 - 90;
+        //         }
+        //         pen.beginPath();
+        //         pen.fillStyle = "rgb(200,0,0)";
+        //     }
+        //     var radianEnd =  percentage * Math.PI / 180;
+        //     // 円の中心に移動してから
+        //     pen.moveTo(canvas.width / 2, canvas.height / 2);
+        //     // 円の中心と割合の角度二点をつなぐ
+        //     pen.arc(canvas.width / 2, canvas.height / 2, 100, radianStart, radianEnd, false);
+        //     pen.closePath();
+        //     pen.fill();
+        // }
+        for (var i = 0; i <= 360; i++) {
+            if (i < frame * 3.6) {
+                if (i <= young_population * 3.6) {
+                    radianStart = 270 * Math.PI / 180;
+                    percentage = young_population * 3.6 - 90;
+                    pen.beginPath();
+                    pen.fillStyle = "rgb(0,0,200)";
+                } else if (i > young_population * 3.6 && i <= (young_population + work_population) * 3.6) {
+                    radianStart = (young_population * 3.6 - 90) * Math.PI / 180;
+                    percentage = (young_population + work_population) * 3.6 - 90;
+                    pen.beginPath();
+                    pen.fillStyle = "rgb(0,200,0)";
+                } else if (i > (young_population + work_population) * 3.6) {
+                    radianStart = ((young_population + work_population) * 3.6 - 90) * Math.PI / 180;
+                    percentage = (young_population + work_population + old_population) * 3.6 - 90;
+                    pen.beginPath();
+                    pen.fillStyle = "rgb(200,0,0)";
+                }
+                var radianEnd =  percentage * Math.PI / 180;
+                pen.moveTo(canvas.width / 2, canvas.height / 2);
+                pen.arc(canvas.width / 2, canvas.height / 2, 100, radianStart, radianEnd, false);
+                pen.closePath();
+                pen.fill();
+            }
+        }
+        pen.beginPath();
+        pen.textAlign = 'center';
+        pen.font = "12px serif";
+        pen.fillStyle = "rgb(0,0,0)";
+        pen.fillText('年少人口', canvas.width / 2 - 110, 345);
+        pen.fillText('割合' + young_population + '%', canvas.width / 2 - 110, 365);
+        pen.fillText('生産年齢人口', canvas.width / 2, 345);
+        pen.fillText('割合' + work_population + '%', canvas.width / 2, 365);
+        pen.fillText('老齢人口', canvas.width / 2 + 110, 345);
+        pen.fillText('割合' + old_population + '%', canvas.width / 2 + 110, 365);
+
+        pen.beginPath();
+        pen.fillStyle = "rgb(0,0,200)";
+        pen.arc(canvas.width / 2 - 165, 350, 15, 0, Math.PI * 2, true);
+        pen.fill();
+
+        pen.beginPath();
+        pen.fillStyle = "rgb(0,200,0)";
+        pen.arc(canvas.width / 2 - 55, 350, 15, 0, Math.PI * 2, true);
+        pen.fill();
+
+        pen.beginPath();
+        pen.fillStyle = "rgb(200,0,0)";
+        pen.arc(canvas.width / 2 + 55, 350, 15, 0, Math.PI * 2, true);
+        pen.fill();
     }
 </script>
 <style>
@@ -273,17 +453,26 @@ select {
 button {
     display: block;
     font-size: 25px;
-    margin: auto;
+    margin: 5px auto;
+}
+div {
+    display: none;
 }
 </style>
 </head>
 <body onload="dropdown(1, 0, 0)">
 <h1>新発田市5歳階級別人口</h1>
-<canvas id="canvas" width="450" height="400"></canvas>
+<canvas id="canvas" width="450" height="425"></canvas>
 <p>
 <select id="year" onchange="setting(0)"></select>年
 <select id="month" onchange="setting(0)"></select>月
 </p>
-<button onclick="setting(1)">アニメーション</button>
+<div id="population_pyramid">
+    <button onclick="setting(1)">アニメーション</button>
+    <button onclick="setting(2)">円グラフ</button>
+</div>
+<div id="pie_chart">
+    <button onclick="setting(0)">人口ピラミッド</button>
+</div>
 </body>
 </html>
