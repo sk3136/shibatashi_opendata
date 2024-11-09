@@ -278,9 +278,9 @@
         old_population = Math.round(old_population * 100 / all_population);
         pen.textAlign = 'center';
         pen.font = "15px sans-serif";
-        pen.fillText('~15歳', canvas.width - 40, 380 - 25);
+        pen.fillText('~14歳', canvas.width - 40, 380 - 25);
         pen.fillText('割合' + young_population + '%', canvas.width - 40, 380 - 5);
-        pen.fillText('16~64歳', canvas.width - 40, 380 - 140);
+        pen.fillText('15~64歳', canvas.width - 40, 380 - 140);
         pen.fillText('割合' + work_population + '%', canvas.width - 40, 380 - 120);
         pen.fillText('65歳~', canvas.width - 40, 380 - 295);
         pen.fillText('割合' + old_population + '%', canvas.width - 40, 380 - 275);
@@ -344,9 +344,9 @@
             }
         }
         var population_percentage = [];
-        population_percentage.push(Math.round(young_population / all_population * 10000) / 100);
-        population_percentage.push(Math.round(work_population / all_population * 10000) / 100);
-        population_percentage.push(Math.round(old_population / all_population * 10000) / 100);
+        population_percentage.push(Math.round(young_population * 10000 / all_population) / 100);
+        population_percentage.push(Math.round(work_population * 10000 / all_population) / 100);
+        population_percentage.push(Math.round(old_population * 10000 / all_population) / 100);
 
         before_percentage_total = 0;
         for (var i = 0; i < before_percentage.length; i++) {
@@ -409,9 +409,9 @@
         pen.fillStyle = "rgb(0,0,0)";
         pen.fillText('年齢別人口構成比', canvas.width / 2, 50);
         pen.font = "15px sans-serif";
-        pen.fillText('~15歳', canvas.width / 2 - 90, 365);
+        pen.fillText('~14歳', canvas.width / 2 - 90, 365);
         pen.fillText('割合' + Math.round(population_percentage[0]) + '%', canvas.width / 2 - 90, 385);
-        pen.fillText('16~64歳', canvas.width / 2 + 25, 365);
+        pen.fillText('15~64歳', canvas.width / 2 + 25, 365);
         pen.fillText('割合' + Math.round(population_percentage[1]) + '%', canvas.width / 2 + 25, 385);
         pen.fillText('65~歳', canvas.width / 2 + 130, 365);
         pen.fillText('割合' + Math.round(population_percentage[2]) + '%', canvas.width / 2 + 130, 385);
